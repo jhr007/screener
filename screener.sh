@@ -16,7 +16,10 @@
 # @todo Make it so you can choose to attach with detaching the screen session.
 #    This way you can have multiuser screen sessions.
 #
+# sudo ln -s /home/jhr/myEnv/screener/screener.sh /usr/local/bin/screener
 #
+#
+
 
 MYSCREENS=$(screen -ls | sed -E '/.*screens? on:.*/d;/[0-9]+ Sockets? in /d;/^\s+$/d;s/\s+([^.]+)\.(\S+?).*/\2(\1)/;' | sed ':a;N;$!ba;s/\n/ /g;')
 
