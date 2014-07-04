@@ -9,10 +9,14 @@ ex:
 
 ```
 $ ./screener.sh
-1) CREATE                        5) Awesomeo(5113)
-2) SomeOtherProject(21036)       6) Switch to: ATTACH ONLY(todo)
-3) Funtimes(20979)               7) Exit
-4) sweetProject(20880)
+
+Defaults to 'screen -D -R ...'
+
+1) CREATE                      4) ProjectZ(5113)
+2) SomeProjec(25414)           5) Toggle Mode(DETACH/ATTACH)
+3) default(24853)              6) Exit
+Option #)
+
 ```
 
 instead of 
