@@ -17,8 +17,18 @@
 #    This way you can have multiuser screen sessions.
 #
 #
+del_no_sockets='/^No Sockets found.*/d'
+del_screens_on='/.*screens? on:.*/d'
+del_num_sockets='/[0-9]+ Sockets? in /d'
+del_blank_lines='/^\s+$/d'
+get_screens='s/\s+([^.]+)\.(\S+?).*/\2(\1)/'
 
-MYSCREENS=$(screen -ls | sed -E '/.*screens? on:.*/d;/[0-9]+ Sockets? in /d;/^\s+$/d;s/\s+([^.]+)\.(\S+?).*/\2(\1)/;' | sed ':a;N;$!ba;s/\n/ /g;')
+sed_string="$del_no_sockets;$del_screens_on;$del_num_sockets;$del_blank_lines;$get_screens"
+
+#Used to join the lines and separate them by a space.
+del_newlines=':a;N;$!ba;s/\n/ /g'
+
+MYSCREENS=$(screen -ls | sed -E "$sed_string" | sed "$del_newlines")
 
 
 #@todo
@@ -46,6 +56,8 @@ createScreen() {
    #createScreen
   fi
 }
+
+PS3="Option #) "
 
 select screen in "CREATE" $MYSCREENS "$(whichMode)" "Exit"; do
 #select screen in "one" "two" "thre" "four" "five" "six" "seven" "eight" "nine"; do
@@ -76,7 +88,7 @@ select screen in "CREATE" $MYSCREENS "$(whichMode)" "Exit"; do
     esac
 done
 
-echo screen -D -R $finalScreenName
 screen -D -R $finalScreenName
+echo ran: screen -D -R $finalScreenName
 
 echo "Thank you for using Screener!!"
