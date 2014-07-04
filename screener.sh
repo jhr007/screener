@@ -38,13 +38,13 @@ del_newlines=':a;N;$!ba;s/\n/ /g'
 MYSCREENS=$(screen -ls | sed -E "$sed_string" | sed "$del_newlines")
 
 
-#@todo
 MODE="DETACH"
+MODEFLAG="-D -R"
 whichMode() {
   if [[ "$MODE" == 'DETACH' ]]; then
-    echo "Switch to: ATTACH ONLY(todo)"
+    echo "Toggle Mode(DETACH/ATTACH)"
   else
-    echo "Switch to: DETACH & REATTACH(todo)"
+    echo "Switch to: DETACH & REATTACH (-D -R)"
   fi
 }
 #/@todo
@@ -66,6 +66,9 @@ createScreen() {
 
 PS3="Option #) "
 
+echo -e
+echo "Defaults to 'screen -D -R ...'"
+echo -e
 select screen in "CREATE" $MYSCREENS "$(whichMode)" "Exit"; do
 #select screen in "one" "two" "thre" "four" "five" "six" "seven" "eight" "nine"; do
     case $screen in
@@ -76,9 +79,18 @@ select screen in "CREATE" $MYSCREENS "$(whichMode)" "Exit"; do
            break;
           fi
           ;;
-        "Switch to"* )
-          echo "Switch to"
-          break
+        "Toggle Mode"* )
+          if [[ "$MODE" == "DETACH" ]]; then
+            echo "Switched to attach (multiuser) mode (screen -x)"
+            MODE="ATTACH"
+            MODEFLAG="-x"
+          else
+            echo "Switched to detach mode (screen -D -R)"
+            MODE="DETACH"
+            MODEFLAG="-D -R"
+          fi
+          continue;
+
           ;;
         "Exit" )
           echo -e
@@ -95,7 +107,11 @@ select screen in "CREATE" $MYSCREENS "$(whichMode)" "Exit"; do
     esac
 done
 
-screen -D -R $finalScreenName
-echo ran: screen -D -R $finalScreenName
+#screen -D -R $finalScreenName
+scrCMD="screen ${MODEFLAG} $finalScreenName"
+
+eval "$scrCMD"
+#screen "${MODEFLAG} $finalScreenName
+echo "Executed: $scrCMD"
 
 echo "Thank you for using Screener!!"
