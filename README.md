@@ -1,7 +1,7 @@
 screener
 ========
 
-Menu for GNU screen to reattach to running screens. 
+A menu driven interface for GNU screen to easily pick which screen to reattch to. 
 
 Creates a menu for `screen -ls`
 
